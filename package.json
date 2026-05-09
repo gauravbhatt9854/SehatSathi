@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@gradio/client": "^2.0.0-dev.1",
     "axios": "^1.13.2",
     "lucide-react": "^0.553.0",
     "next": "16.0.10",
@@ -18,7 +19,6 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "@gradio/client": "^2.0.0-dev.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^20",
     "@types/react": "^19",
