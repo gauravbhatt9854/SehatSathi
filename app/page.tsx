@@ -75,7 +75,7 @@ export default function HealthBuddyPage() {
   );
   const [useHuggingFaceOnly, setUseHuggingFaceOnly] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
     null
   );
   const [locationStatus, setLocationStatus] = useState<
@@ -106,8 +106,11 @@ export default function HealthBuddyPage() {
   };
 
   const handlePredict = async () => {
+
+    const NEXT_PUBLIC_HUGGING_FACE_API= process.env.NEXT_PUBLIC_HUGGING_FACE_API!;
     if (!problemText.trim()) return alert("Please enter your symptoms!");
-    if (!location) return alert("Please fetch your location!");
+    if (!location) return alert("Please enable location access to find nearby doctors!");
+
 
     setLoading(true);
     setData(null);
@@ -355,12 +358,24 @@ export default function HealthBuddyPage() {
               <p className="text-slate-800 leading-relaxed">
                 {data[2].replace(/\*\*/g, "")}
               </p>
-              <p className="mt-2 text-gray-700">
-                {data[3]
-                  .split("\n")[0]
-                  .replace(/\*\*/g, "")
-                  .replace("Recommended Specialist:", "Specialist:")}
+              <p className="text-slate-700 font-medium pt-2 border-t border-blue-200">
+                Specialist: {data.specialization}
               </p>
+              
+              {/* Show all model predictions */}
+              {data.predictions && (
+                <div className="pt-3 mt-3 border-t border-blue-200">
+                  <p className="text-sm text-slate-600 mb-2">Model Predictions:</p>
+                  <div className="space-y-1">
+                    {Object.entries(data.predictions).map(([model, prediction]) => (
+                      <div key={model} className="text-sm">
+                        <span className="font-medium text-slate-700">{model}:</span>{" "}
+                        <span className="text-slate-600">{prediction as string}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -377,7 +392,7 @@ export default function HealthBuddyPage() {
             )}
 
             <div className="grid gap-4 md:grid-cols-2">
-              {doctors.map((doc, idx) => (
+              {data.doctors_nearby && data.doctors_nearby.map((doc: any, idx: number) => (
                 <div
                   key={idx}
                   className="p-5 border border-blue-100 rounded-2xl bg-white hover:shadow-lg hover:border-blue-200 hover:-translate-y-1 transition-all duration-300"

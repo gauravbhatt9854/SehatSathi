@@ -23,11 +23,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
         className={`${dmSans.variable} ${dmSerif.variable} antialiased bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen text-slate-900`}
         style={{ fontFamily: "var(--font-dm-sans)" }}
