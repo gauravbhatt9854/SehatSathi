@@ -197,23 +197,22 @@ export default function HealthBuddyPage() {
   const doctors = fallbackDoctors ?? (data && data[3] ? extractDoctors(data[3]) : []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center py-10 px-4">
-      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-        <h1 className="text-3xl font-bold text-center mb-6 text-blue-700">
-          🩺 HealthBuddy — Doctor Finder AI
-        </h1>
-
-        {/* 🔹 Input */}
+    <div className="p-8">
+      {/* Input Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-slate-700 mb-2">
+          Describe Your Symptoms
+        </label>
         <textarea
-          className="w-full border rounded-lg p-3 mb-4 text-gray-700"
-          rows={4}
-          placeholder="Describe your health issue (e.g. chest pain, fever, cough)..."
+          className="w-full border-2 border-blue-100 rounded-xl p-4 text-slate-700 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all resize-none"
+          rows={5}
+          placeholder="e.g., I have a persistent headache with nausea and sensitivity to light..."
           value={problemText}
           onChange={(e) => setProblemText(e.target.value)}
         />
       </div>
 
-      <label className="mb-6 flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+      <label className="mb-6 flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-slate-700">
         <input
           type="checkbox"
           checked={useHuggingFaceOnly}
@@ -230,34 +229,42 @@ export default function HealthBuddyPage() {
         </span>
       </label>
 
-        {/* 🔹 Buttons */}
-        <div className="flex items-center gap-3 mb-4">
-          <button
-            onClick={getLocation}
-            className="flex-1 bg-gray-200 text-gray-800 font-semibold py-2 rounded-lg hover:bg-gray-300 transition"
-          >
-            📍 Get Location
-          </button>
-          <button
-            onClick={handlePredict}
-            disabled={loading}
-            className="flex-1 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            {loading ? "Analyzing..." : "Find Doctors"}
-          </button>
-        </div>
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+        <button
+          onClick={getLocation}
+          disabled={locationStatus === "requesting"}
+          className="flex-1 px-6 py-3 bg-white border-2 border-blue-200 text-blue-600 font-semibold rounded-xl hover:bg-blue-50 hover:border-blue-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:cursor-wait disabled:opacity-70"
+        >
+          {locationStatus === "requesting"
+            ? "Getting Location..."
+            : locationStatus === "granted"
+              ? "Location Set"
+              : "Get My Location"}
+        </button>
+        <button
+          onClick={handlePredict}
+          disabled={loading}
+          className="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 hover:-translate-y-0.5 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        >
+          {loading ? "Analyzing..." : "Find Doctors"}
+        </button>
+      </div>
 
-        {location && (
-          <p className="text-sm text-gray-500 mb-4 text-center">
-            🌎 Location: {location.lat.toFixed(4)}, {location.lon.toFixed(4)}
+      {location && (
+        <div className="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg text-center">
+          <p className="text-sm text-green-700">
+            <span className="font-semibold">Location Active:</span>{" "}
+            {location.lat.toFixed(4)}, {location.lon.toFixed(4)}
           </p>
-        )}
+        </div>
+      )}
 
       {locationStatus === "denied" && !location && (
         <div className="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg text-center">
           <p className="text-sm text-amber-700">
-            <span className="font-semibold"> Location Access Needed:</span> Please
-            click &quot;Enable Location&quot; to find nearby doctors
+            <span className="font-semibold">Location Access Needed:</span> Please
+            click &quot;Get My Location&quot; to find nearby doctors
           </p>
         </div>
       )}
@@ -265,7 +272,7 @@ export default function HealthBuddyPage() {
       {locationStatus === "requesting" && (
         <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center">
           <p className="text-sm text-blue-700">
-            <span className="font-semibold"> Requesting location...</span> Please
+            <span className="font-semibold">Requesting location...</span> Please
             allow access when prompted
           </p>
         </div>
@@ -359,47 +366,55 @@ export default function HealthBuddyPage() {
 
           <div>
             {/* Doctor List */}
-            <h2 className="text-2xl font-bold text-blue-700 mb-4">
-              👨‍⚕️ Recommended Doctors
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              Recommended Doctors Near You
             </h2>
 
             {doctors.length === 0 && (
-              <p className="text-gray-600">No doctor data found 😢</p>
+              <div className="text-center py-8 bg-slate-50 rounded-xl border border-slate-200">
+                <p className="text-slate-600">No doctor recommendations available</p>
+              </div>
             )}
 
             <div className="grid gap-4 md:grid-cols-2">
               {doctors.map((doc, idx) => (
                 <div
                   key={idx}
-                  className="p-4 border rounded-xl bg-gray-50 hover:shadow-md transition"
+                  className="p-5 border border-blue-100 rounded-2xl bg-white hover:shadow-lg hover:border-blue-200 hover:-translate-y-1 transition-all duration-300"
                 >
-                  <h3 className="text-lg font-semibold text-blue-800 mb-1">
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">
                     {doc.name}
                   </h3>
-                  <p className="text-gray-700 text-sm mb-2">{doc.address}</p>
-                  {doc.rating && (
-                    <p className="text-yellow-600 text-sm mb-1">
-                      ⭐ {doc.rating}
+                  {doc.address && (
+                    <p className="text-slate-600 text-sm mb-3 leading-relaxed">
+                      {doc.address}
                     </p>
                   )}
-                  {doc.phone && (
-                    <a
-                      href={`tel:${doc.phone.replace(/\s+/g, "")}`}
-                      className="inline-block bg-green-600 text-white text-sm px-3 py-1 rounded-md hover:bg-green-700 mr-2"
-                    >
-                      📞 Call
-                    </a>
+                  {doc.rating && (
+                    <p className="text-amber-600 text-sm mb-3 font-medium">
+                      {doc.rating}
+                    </p>
                   )}
-                  {doc.website && (
-                    <a
-                      href={doc.website.trim()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-blue-600 text-white text-sm px-3 py-1 rounded-md hover:bg-blue-700"
-                    >
-                      🌐 Website
-                    </a>
-                  )}
+                  <div className="flex gap-2 flex-wrap">
+                    {doc.phone && (
+                      <a
+                        href={`tel:${doc.phone.replace(/\s+/g, "")}`}
+                        className="inline-flex items-center bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        Call
+                      </a>
+                    )}
+                    {doc.website && (
+                      <a
+                        href={doc.website.trim()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Website
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
