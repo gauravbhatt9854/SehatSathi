@@ -18,7 +18,6 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
-    "@gradio/client": "^2.0.0-dev.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "emergency_chest_pain",
+    "condition": "Possible cardiac or serious chest symptoms",
+    "specialist": "Cardiologist",
+    "urgency": "emergency",
+    "symptoms": ["chest pain", "chest pressure", "left arm pain", "jaw pain", "sweating", "breathlessness", "palpitation"],
+    "text": "Chest pain, chest pressure, sweating, breathlessness, palpitations, or pain spreading to the left arm or jaw can suggest a heart-related emergency. A cardiologist is the relevant specialist, but severe or sudden symptoms should be treated as emergency care first.",
+    "advice": "Chest pain, pressure, breathlessness, sweating, or pain spreading to the arm or jaw can be urgent. Seek emergency care immediately, especially if symptoms are sudden or severe."
+  },
+  {
+    "id": "stroke_warning",
+    "condition": "Possible stroke warning symptoms",
+    "specialist": "Neurologist",
+    "urgency": "emergency",
+    "symptoms": ["face drooping", "slurred speech", "one sided weakness", "sudden numbness", "confusion", "vision loss", "severe headache"],
+    "text": "Sudden facial drooping, slurred speech, one-sided weakness, numbness, confusion, sudden vision loss, or sudden severe headache can suggest stroke warning symptoms. These need emergency medical care and neurological evaluation.",
+    "advice": "Sudden weakness, speech difficulty, facial drooping, confusion, or vision loss can be a stroke warning. Seek emergency medical care immediately."
+  },
+  {
+    "id": "viral_fever_flu",
+    "condition": "Viral fever or flu-like illness",
+    "specialist": "Physician",
+    "urgency": "normal",
+    "symptoms": ["fever", "headache", "nausea", "body pain", "weakness", "chills", "cough", "sore throat", "runny nose", "tiredness"],
+    "text": "Fever, headache, nausea, body pain, weakness, chills, cough, sore throat, runny nose, and tiredness often fit a viral fever, flu-like illness, or general infection pattern. A physician is usually the first doctor to consult for this combination of symptoms.",
+    "advice": "Rest, drink fluids, monitor fever, and consult a physician if fever is high, symptoms persist, or breathing becomes difficult."
+  },
+  {
+    "id": "migraine",
+    "condition": "Migraine-like headache symptoms",
+    "specialist": "Neurologist",
+    "urgency": "normal",
+    "symptoms": ["migraine", "headache", "one side headache", "throbbing headache", "nausea", "vomiting", "light sensitivity", "sound sensitivity", "aura"],
+    "text": "Migraine commonly causes recurrent or one-sided throbbing headache with nausea, vomiting, light sensitivity, sound sensitivity, aura, or blurred vision. A neurologist is suitable when headaches are severe, repeated, unusual, or associated with neurological symptoms.",
+    "advice": "Rest in a quiet place, stay hydrated, and consult a neurologist or physician if symptoms are severe, sudden, or recurring."
+  },
+  {
+    "id": "respiratory_infection",
+    "condition": "Respiratory infection symptoms",
+    "specialist": "Pulmonologist",
+    "urgency": "urgent",
+    "symptoms": ["dry cough", "fever with cough", "loss of smell", "loss of taste", "breathing difficulty", "shortness of breath", "chest congestion", "covid"],
+    "text": "Dry cough, fever with cough, chest congestion, loss of smell or taste, shortness of breath, oxygen issues, or breathing difficulty can suggest a respiratory infection. A pulmonologist or physician can review breathing-related illness.",
+    "advice": "Consult a physician or pulmonologist, and seek urgent care if breathing is difficult or oxygen levels are low."
+  },
+  {
+    "id": "asthma_breathing",
+    "condition": "Asthma or breathing-related symptoms",
+    "specialist": "Pulmonologist",
+    "urgency": "urgent",
+    "symptoms": ["wheezing", "asthma", "breathing problem", "shortness of breath", "chest tightness", "cough at night", "inhaler"],
+    "text": "Wheezing, chest tightness, night cough, breathing problems, shortness of breath, or needing an inhaler can suggest asthma or another airway problem. A pulmonologist is the relevant specialist for repeated breathing symptoms.",
+    "advice": "Use prescribed inhalers if available and consult a pulmonologist. Seek urgent care for severe breathlessness."
+  },
+  {
+    "id": "digestive_issue",
+    "condition": "Digestive or stomach-related symptoms",
+    "specialist": "Gastroenterologist",
+    "urgency": "normal",
+    "symptoms": ["stomach pain", "abdominal pain", "diarrhea", "loose motion", "constipation", "acidity", "heartburn", "vomiting", "nausea", "gas", "bloating", "food poisoning"],
+    "text": "Stomach pain, abdominal pain, diarrhea, loose motions, constipation, acidity, heartburn, vomiting, nausea, gas, bloating, or food poisoning symptoms can suggest digestive illness. A gastroenterologist is suitable for persistent or severe digestive symptoms.",
+    "advice": "Stay hydrated and consult a gastroenterologist or physician if pain is severe, symptoms persist, or dehydration occurs."
+  },
+  {
+    "id": "appendix_warning",
+    "condition": "Possible severe abdominal condition",
+    "specialist": "General Surgeon",
+    "urgency": "urgent",
+    "symptoms": ["right lower abdominal pain", "right lower stomach pain", "severe abdominal pain", "stomach pain with fever", "appendix", "appendicitis"],
+    "text": "Severe abdominal pain, pain moving to the right lower abdomen, right lower stomach pain, abdominal pain with fever, or suspected appendix symptoms may need urgent surgical evaluation. A general surgeon is often involved after medical assessment.",
+    "advice": "Severe or right lower abdominal pain with fever or vomiting may need urgent evaluation. Visit emergency care or consult a doctor quickly."
+  },
+  {
+    "id": "urinary_issue",
+    "condition": "Urinary tract symptoms",
+    "specialist": "Urologist",
+    "urgency": "normal",
+    "symptoms": ["burning urination", "pain while urinating", "frequent urination", "urine infection", "uti", "blood in urine", "kidney pain", "flank pain"],
+    "text": "Burning urination, pain while urinating, frequent urination, urine infection, blood in urine, kidney pain, or flank pain can suggest urinary tract or kidney-related symptoms. A urologist or physician can evaluate these problems.",
+    "advice": "Drink water and consult a urologist or physician, especially with fever, blood in urine, or severe pain."
+  },
+  {
+    "id": "skin_issue",
+    "condition": "Skin-related symptoms",
+    "specialist": "Dermatologist",
+    "urgency": "normal",
+    "symptoms": ["rash", "itching", "acne", "pimples", "redness", "allergy", "hives", "swelling", "eczema", "dry skin", "boil"],
+    "text": "Rash, itching, acne, pimples, redness, hives, eczema, dry skin, boils, skin infection, or allergy-like skin symptoms are commonly handled by a dermatologist.",
+    "advice": "Avoid scratching and consult a dermatologist if it spreads, becomes painful, or does not improve."
+  },
+  {
+    "id": "eye_issue",
+    "condition": "Eye-related symptoms",
+    "specialist": "Ophthalmologist",
+    "urgency": "normal",
+    "symptoms": ["eye pain", "red eye", "itchy eyes", "blurred vision", "vision problem", "watery eyes", "eye discharge", "swollen eyelid", "dry eyes"],
+    "text": "Eye pain, red eye, itchy eyes, blurred vision, watery eyes, eye discharge, swollen eyelids, dry eyes, or vision problems should be reviewed by an ophthalmologist.",
+    "advice": "Consult an ophthalmologist. Seek urgent care for sudden vision loss, eye injury, or severe eye pain."
+  },
+  {
+    "id": "ent_issue",
+    "condition": "Ear, nose, or throat symptoms",
+    "specialist": "ENT Specialist",
+    "urgency": "normal",
+    "symptoms": ["ear pain", "ear discharge", "hearing loss", "blocked ear", "sinus", "sinus pain", "nose bleeding", "tonsil", "throat infection", "hoarse voice", "difficulty swallowing"],
+    "text": "Ear pain, ear discharge, hearing loss, blocked ear, sinus pain, nose bleeding, tonsil symptoms, throat infection, hoarse voice, or difficulty swallowing are commonly evaluated by an ENT specialist.",
+    "advice": "Consult an ENT specialist. Seek urgent care for breathing difficulty, heavy bleeding, or severe throat swelling."
+  },
+  {
+    "id": "dental_issue",
+    "condition": "Dental or oral symptoms",
+    "specialist": "Dentist",
+    "urgency": "normal",
+    "symptoms": ["tooth pain", "toothache", "gum swelling", "bleeding gums", "mouth ulcer", "bad breath", "jaw pain", "cavity", "wisdom tooth"],
+    "text": "Tooth pain, toothache, gum swelling, bleeding gums, mouth ulcers, bad breath, jaw pain, cavity, or wisdom tooth pain should be reviewed by a dentist.",
+    "advice": "Consult a dentist. Seek urgent dental care if swelling spreads, fever develops, or pain is severe."
+  },
+  {
+    "id": "orthopedic_pain",
+    "condition": "Joint, bone, or muscle symptoms",
+    "specialist": "Orthopedic",
+    "urgency": "normal",
+    "symptoms": ["joint pain", "back pain", "neck pain", "knee pain", "shoulder pain", "fracture", "sprain", "swelling", "muscle pain", "leg pain", "ankle pain", "sports injury"],
+    "text": "Joint pain, back pain, neck pain, knee pain, shoulder pain, fracture, sprain, swelling after injury, muscle pain, leg pain, ankle pain, or sports injury symptoms are commonly evaluated by an orthopedic specialist.",
+    "advice": "Rest the affected area and consult an orthopedic specialist if pain is severe, swollen, or follows an injury."
+  },
+  {
+    "id": "diabetes_symptoms",
+    "condition": "Possible diabetes or blood sugar symptoms",
+    "specialist": "Endocrinologist",
+    "urgency": "normal",
+    "symptoms": ["excessive thirst", "frequent urination", "weight loss", "increased hunger", "high sugar", "diabetes", "slow wound healing", "tired all the time"],
+    "text": "Excessive thirst, frequent urination, unexplained weight loss, increased hunger, high sugar readings, slow wound healing, and ongoing tiredness can suggest diabetes or blood sugar problems. An endocrinologist can evaluate these symptoms.",
+    "advice": "Consult an endocrinologist or physician for blood sugar testing and medical review."
+  },
+  {
+    "id": "thyroid_symptoms",
+    "condition": "Possible thyroid-related symptoms",
+    "specialist": "Endocrinologist",
+    "urgency": "normal",
+    "symptoms": ["weight gain", "weight loss", "hair fall", "cold intolerance", "heat intolerance", "neck swelling", "thyroid", "irregular heartbeat", "fatigue"],
+    "text": "Weight gain, weight loss, hair fall, fatigue, cold intolerance, heat intolerance, neck swelling, thyroid concerns, or irregular heartbeat can be related to thyroid imbalance. An endocrinologist or physician can evaluate thyroid symptoms.",
+    "advice": "Consult an endocrinologist or physician for thyroid testing and review."
+  },
+  {
+    "id": "women_health",
+    "condition": "Gynecological or menstrual symptoms",
+    "specialist": "Gynecologist",
+    "urgency": "normal",
+    "symptoms": ["period pain", "irregular periods", "heavy bleeding", "missed period", "pregnancy", "vaginal discharge", "pelvic pain", "pcos", "menstrual cramps"],
+    "text": "Period pain, irregular periods, heavy bleeding, missed period, pregnancy concerns, vaginal discharge, pelvic pain, PCOS, or menstrual cramps should be discussed with a gynecologist.",
+    "advice": "Consult a gynecologist. Seek urgent care for severe pelvic pain, fainting, pregnancy complications, or heavy bleeding."
+  },
+  {
+    "id": "mental_health",
+    "condition": "Mental health or stress-related symptoms",
+    "specialist": "Psychiatrist",
+    "urgency": "normal",
+    "symptoms": ["anxiety", "panic", "depression", "stress", "sleep problem", "insomnia", "sadness", "fear", "mood swings", "negative thoughts"],
+    "text": "Anxiety, panic, depression, stress, sleep problems, insomnia, sadness, fear, mood swings, or persistent negative thoughts can benefit from mental health support. A psychiatrist or psychologist may help depending on severity.",
+    "advice": "Consult a psychiatrist or psychologist. Seek immediate help if there are thoughts of self-harm."
+  },
+  {
+    "id": "child_health",
+    "condition": "Child or pediatric symptoms",
+    "specialist": "Pediatrician",
+    "urgency": "normal",
+    "symptoms": ["child fever", "baby fever", "infant", "newborn", "child cough", "child vomiting", "child diarrhea", "baby not feeding", "rash in child"],
+    "text": "Fever, cough, vomiting, diarrhea, rash, poor feeding, or illness in a baby, infant, newborn, or child should be reviewed by a pediatrician.",
+    "advice": "Consult a pediatrician, especially for fever in infants, poor feeding, dehydration, breathing issues, or persistent vomiting."
+  },
+  {
+    "id": "allergy",
+    "condition": "Allergy-related symptoms",
+    "specialist": "Allergist",
+    "urgency": "urgent",
+    "symptoms": ["allergy", "sneezing", "itching", "hives", "swollen lips", "swollen face", "watery eyes", "food allergy", "dust allergy", "throat tightness"],
+    "text": "Sneezing, itching, hives, watery eyes, food allergy, dust allergy, swollen lips, swollen face, or throat tightness can suggest allergy. An allergist can help with recurring allergies, but breathing difficulty or throat swelling is urgent.",
+    "advice": "Consult an allergist for recurring allergy. Seek urgent care for breathing difficulty, throat tightness, or swelling of lips or face."
+  }
+]

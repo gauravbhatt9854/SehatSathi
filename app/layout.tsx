@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 
@@ -74,10 +75,13 @@ export default function RootLayout({
 
             <div className="hidden md:flex justify-center relative">
               <div className="absolute inset-0 bg-blue-200 rounded-full blur-[120px] opacity-20" />
-              <img
+              <Image
                 src="/health-illustration.webp"
                 alt="Healthcare Illustration"
+                width={448}
+                height={448}
                 className="relative w-full max-w-md drop-shadow-2xl"
+                priority
               />
             </div>
           </div>
