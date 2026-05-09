@@ -1,5 +1,3 @@
-import { Client } from "@gradio/client";
-
 type HuggingFaceArgs = {
   symptoms: string;
   latitude: number;
@@ -13,6 +11,34 @@ type CircuitState = {
   openedUntil: number;
 };
 
+type FastApiDoctor = {
+  name?: string;
+  address?: string;
+  phone?: string | null;
+  website?: string | null;
+  rating?: number | string | null;
+  total_ratings?: number | null;
+};
+
+type FastApiResponse = {
+  symptoms?: string[];
+  predictions?: Record<string, string>;
+  final_disease?: string;
+  specialization?: string;
+  doctors_nearby?: FastApiDoctor[];
+  detected_location_name?: string;
+  error?: string;
+  raw_input?: string;
+};
+
+export type DoctorCard = {
+  name: string;
+  address: string;
+  phone: string;
+  rating: string;
+  website: string;
+};
+
 export type HuggingFaceDebug = {
   attempted: boolean;
   success: boolean;
@@ -24,10 +50,13 @@ export type HuggingFaceDebug = {
   timeoutMs: number;
   circuitBefore: ReturnType<typeof getHuggingFaceCircuitStatus>;
   circuitAfter: ReturnType<typeof getHuggingFaceCircuitStatus>;
+  endpoint: string;
 };
 
 export type HuggingFaceCallResult = {
-  data: unknown;
+  data: string[];
+  doctors: DoctorCard[];
+  raw: FastApiResponse;
   debug: HuggingFaceDebug;
 };
 
@@ -38,14 +67,10 @@ const circuitState: CircuitState = {
 
 const failureThreshold = 2;
 const cooldownMs = 2 * 60 * 1000;
-const requestTimeoutMs = 45 * 1000;
-
-export class CircuitOpenError extends Error {
-  constructor() {
-    super("Hugging Face circuit is open. Using RAG fallback.");
-    this.name = "CircuitOpenError";
-  }
-}
+const requestTimeoutMs = 5 * 60 * 1000;
+const endpoint =
+  process.env.HEALTHBUDDY_HF_API_URL ??
+  "https://gauravbhatt9854-healthbuddy.hf.space/predict";
 
 export class HuggingFaceRequestError extends Error {
   debug: HuggingFaceDebug;
@@ -99,6 +124,52 @@ async function withTimeout<T>(promise: Promise<T>) {
   }
 }
 
+function formatDoctors(doctors: FastApiDoctor[] = []): DoctorCard[] {
+  return doctors.map((doctor) => ({
+    name: doctor.name ?? "Unknown Doctor",
+    address: doctor.address ?? "",
+    phone: doctor.phone ?? "",
+    website: doctor.website ?? "",
+    rating:
+      doctor.rating === undefined || doctor.rating === null
+        ? ""
+        : `${doctor.rating}${
+            doctor.total_ratings ? ` (${doctor.total_ratings} ratings)` : ""
+          }`,
+  }));
+}
+
+function buildModelData(response: FastApiResponse): string[] {
+  const disease = response.final_disease ?? "Unknown condition";
+  const specialization = response.specialization ?? "Physician";
+  const symptoms = response.symptoms?.join(", ") || "No symptoms extracted";
+  const predictions = response.predictions
+    ? Object.entries(response.predictions)
+        .map(([model, prediction]) => `${model}: ${prediction}`)
+        .join(", ")
+    : "No model predictions returned";
+
+  const doctorLines = (response.doctors_nearby ?? [])
+    .slice(0, 5)
+    .map((doctor, index) => {
+      return `**${index + 1}. ${doctor.name ?? "Unknown Doctor"}**
+Address: ${doctor.address ?? ""}
+Phone: ${doctor.phone ?? ""}
+Rating: ${doctor.rating ?? ""}
+Website: ${doctor.website ?? ""}`;
+    })
+    .join("\n\n");
+
+  return [
+    symptoms,
+    predictions,
+    `Predicted condition: ${disease}. Extracted symptoms: ${symptoms}.`,
+    `Recommended Specialist: ${specialization}
+
+${doctorLines}`,
+  ];
+}
+
 export function getHuggingFaceCircuitStatus() {
   return {
     failures: circuitState.failures,
@@ -107,13 +178,10 @@ export function getHuggingFaceCircuitStatus() {
   };
 }
 
-export async function callHealthBuddyModel({
-  symptoms,
-  latitude,
-  longitude,
-  ragContext,
-  forceAttempt = false,
-}: HuggingFaceArgs): Promise<HuggingFaceCallResult> {
+export async function callHealthBuddyModel(
+  args: HuggingFaceArgs
+): Promise<HuggingFaceCallResult> {
+  const { symptoms, latitude, longitude, forceAttempt = false } = args;
   const startedAtMs = Date.now();
   const startedAt = new Date(startedAtMs).toISOString();
   const circuitBefore = getHuggingFaceCircuitStatus();
@@ -133,6 +201,7 @@ export async function callHealthBuddyModel({
       timeoutMs: requestTimeoutMs,
       circuitBefore,
       circuitAfter,
+      endpoint,
     };
 
     console.warn("[HF Circuit] OPEN - skipping Hugging Face call:", {
@@ -151,39 +220,35 @@ export async function callHealthBuddyModel({
   let stage: HuggingFaceDebug["stage"] = "connect";
 
   try {
-    console.log("[HF] Connecting to Space:", {
-      space: "gauravbhatt9854/healthBuddy",
+    console.log("[HF] Calling FastAPI endpoint:", {
+      endpoint,
       timeoutMs: requestTimeoutMs,
     });
 
-    const client = await withTimeout(
-      Client.connect("gauravbhatt9854/healthBuddy")
-    );
-
-    console.log("[HF] Connected. Calling predict endpoint:", {
-      endpoint: "/predict_disease_interface",
-    });
-
-    const enhancedProblemText = `
-User symptoms:
-${symptoms}
-
-Knowledge base context:
-${ragContext}
-`.trim();
+    // The Hugging Face FastAPI app uses Gemini to extract exact symptoms from
+    // the user's complaint, so keep this field clean and do not append RAG text.
+    const problem = symptoms;
 
     stage = "predict";
 
-    const result = await withTimeout(
-      client.predict("/predict_disease_interface", {
-        problem_text: enhancedProblemText,
-        latitude,
-        longitude,
+    const response = await withTimeout(
+      fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          problem,
+          lat: latitude,
+          lng: longitude,
+        }),
       })
     );
 
-    if (!result.data) {
-      throw new Error("Hugging Face returned an empty response.");
+    const json = (await response.json()) as FastApiResponse;
+
+    if (!response.ok || json.error) {
+      throw new Error(json.error ?? `HTTP ${response.status}`);
     }
 
     recordSuccess();
@@ -199,12 +264,15 @@ ${ragContext}
       timeoutMs: requestTimeoutMs,
       circuitBefore,
       circuitAfter,
+      endpoint,
     };
 
     console.log("[HF] Success:", debug);
 
     return {
-      data: result.data,
+      data: buildModelData(json),
+      doctors: formatDoctors(json.doctors_nearby),
+      raw: json,
       debug,
     };
   } catch (error) {
@@ -221,6 +289,7 @@ ${ragContext}
       timeoutMs: requestTimeoutMs,
       circuitBefore,
       circuitAfter,
+      endpoint,
     };
 
     console.error("[HF] Failed:", debug);

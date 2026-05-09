@@ -33,6 +33,8 @@ export async function POST(req: Request) {
         mode: "huggingface-only",
         rag: null,
         data: huggingFace.data,
+        doctors: huggingFace.doctors,
+        huggingFaceRaw: huggingFace.raw,
         huggingFace: huggingFace.debug,
         circuit: getHuggingFaceCircuitStatus(),
       });
@@ -95,6 +97,8 @@ export async function POST(req: Request) {
       mode: "rag-assisted",
       rag,
       data: huggingFace.data,
+      doctors: huggingFace.doctors,
+      huggingFaceRaw: huggingFace.raw,
       huggingFace: huggingFace.debug,
       circuit: getHuggingFaceCircuitStatus(),
     });
