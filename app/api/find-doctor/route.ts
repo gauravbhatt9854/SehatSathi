@@ -2,43 +2,6 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-type NearbyPlace = {
-  place_id: string;
-};
-
-type PlaceDetailsResponse = {
-  data: {
-    result: {
-      place_id: string;
-      name: string;
-      vicinity: string;
-      formatted_phone_number?: string;
-      website?: string;
-      opening_hours?: unknown;
-      rating?: number;
-      user_ratings_total?: number;
-      geometry: {
-        location: {
-          lat: number;
-          lng: number;
-        };
-      };
-    };
-  };
-};
-
-function getErrorDetails(err: unknown) {
-  if (axios.isAxiosError(err)) {
-    return err.response?.data || err.message;
-  }
-
-  if (err instanceof Error) {
-    return err.message;
-  }
-
-  return err;
-}
-
 export async function POST(req: Request) {
   try {
     const { symptoms, lat, lng } = await req.json();
@@ -125,7 +88,7 @@ export async function POST(req: Request) {
     ].join(",");
 
     // Create an array of promises, one for each detail request
-    const detailRequests = (places as NearbyPlace[]).map((place) => {
+    const detailRequests = places.map((place: any) => {
       return axios.get(
         "https://maps.googleapis.com/maps/api/place/details/json",
         {
@@ -139,12 +102,10 @@ export async function POST(req: Request) {
     });
 
     // Execute all detail requests in parallel for speed
-    const detailResponses = (await Promise.all(
-      detailRequests
-    )) as PlaceDetailsResponse[];
+    const detailResponses = await Promise.all(detailRequests);
 
     // Map the *full details* from the second API call
-    const doctors = detailResponses.map((res) => {
+    const doctors = detailResponses.map((res: any) => {
       const doc = res.data.result;
       return {
         place_id: doc.place_id, // ADDED this line
@@ -165,13 +126,12 @@ export async function POST(req: Request) {
       doctors,
     });
 
-  } catch (err: unknown) {
-    const details = getErrorDetails(err);
-    console.error("💥 Error Source:", details);
+  } catch (err: any) {
+    console.error("💥 Error Source:", err.response?.data || err.message || err);
     return NextResponse.json(
       {
         error: "Gemini or Google API error occurred.",
-        details,
+        details: err.response?.data || err.message,
       },
       { status: 500 }
     );
